@@ -1,0 +1,95 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{ Symulacja procesów powstawania gatunków w ekosystemie w efekcie występowania barier geograficznych}
+\author{Izabela Bubula, Andrzej Kotulski}
+\date{Listopad 2025}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{bibliografia.bib}
+
+\begin{document}
+
+\maketitle
+
+\section{Wprowadzenie}
+
+Gatunki i ich różnorodność, którą można zaobserwować w odmiennych środowiskach, jest efektem procesów ewolucyjnych które zachodzą w długim czasie. Różnorodność ta spowodowana jest barierami przepływu genów między osobnikami. Jednym z bardziej znaczących mechanizmów powstawania nowych gatunków są bariery geograficzne. które poprzez podział populacji tworzą izolowane grupy. Bariery geograficzne można podzielić na 2 grupy:
+
+\begin{itemize}
+    \item Fizyczne:
+         \begin{itemize}
+            \item pasma górskie,
+            \item jeziora,
+            \item rzeki,
+            \item pustynie,
+            \item wyspy,
+            \item obszary o skrajnie odmiennych warunkach
+      \end{itemize}
+    \item Środowiskowe:
+        \begin{itemize}
+            \item strefy klimatyczne,
+            \item zróżnicowanie warunków życia
+        \end{itemize}
+\end{itemize}
+
+Powstawianie lub zanikanie tych barier jest ściśle związane z dynamiką klimatu oraz zmian terenowych związanych m.in. z użytkowaniem terenu. Dzięki rozwojowi modelowania komputerowego możemy coraz dokładniej śledzić sposób w jaki izolacja przestrzenna wpływa na zróżnicowanie genetyczne.
+
+Cel tego projektu to zaprojektowanie i implementacja modelu symulacyjnego, który będzie odwzorowywał proces zmian i powstawania gatunków w ekosystemie, w którym występują bariery geograficzne. Dzięki zaprojektowanemu modelowi będziemy mogli analizować:
+\begin{itemize}
+    \item wielkości i rozmieszczenie barier 
+    \item parametry demograficzne (np. liczebności, migracje)
+    \item tempo i charakter środowiska oraz jego zmiany
+\end{itemize}
+oraz ich wpływ na izolacje genetyczne, różnice populacyjne oraz stabilność powstałych genów. 
+
+\section{Przegląd aktualnego stanu badań}
+\subsection{Rola barier geograficznych i klimatycznych w powstawaniu nowych gatunków}
+
+Powstawanie nowych gatunków bądź nasilanie różnic genetycznych może być wzmocnione poprzez przedstawienie barier geograficznych. Jest to jedno z klasycznych założeń powstawania nowych gatunków. W najnowszych pracach przeczytać można iż nie tylko fizyczne granice mogą być uważane za bariery geograficzne ale również bariery środowiskowe bądź klimatyczne spełniają podobne role.  
+
+W artykule \textit{Konserwatyzm niszy ekologicznej stymuluje dywersyfikację w odpowiedzi na zmiany klimatyczne} (ang. Ecological niche conservatism spurs diversification in re-
+sponse to climate change)\cite{1} można przeczytać, że mała zdolność gatunków do adaptacji w innych warunkach klimatycznych (konserwatyzm niszy klimatycznej) ma związek z tempem różnicowania linii ewolucyjnych. "Strefy nieodpowiednie" tworzone przez różnice klimatyczne, które izolują dawniej ciągłe populacje, przerywają przepływ genów sprzyjając jednocześnie do powstawania gatunków żyjących w odrębnych miejscach. Jeżeli gatunki nie są w stanie przystosować się wystarczająco szybko do warunków pośrednich to bariery te mogą utrzymywać się przez długi czas.
+
+Podobne wnioski można znaleźć w artykule \textit{Schronienie klimatyczne i izolacja geograficzna przyczyniają się do specjacji i rozbieżności genetycznej u piwonii drzewiastych Himalajów i Hengduan} (ang. Climatic Refugia and Geographical Isolation Contribute to the Speciation and Genetic Divergence in Himalayan-Hengduan Tree Peonies (Paeonia delavayi and Paeonia ludlowii). Badane tam były dwa blisko spokrewnione gatunki drzewiastych piwonii, które mają wspólny historyczny genotyp, ale zupełnie inne rozmieszczenie geograficzne, P. delavayi można znaleźć w wielu prowincjach zachodnio-północnych Chin, gdzie klimat jest łagodniejszy, a P. ludlowii występuje tylko w małym obszarze Tybetu ze znacznie chłodniejszym i suchszym klimatem. P. ludlowii wykazała się małą ilością haplotypów co świadczy o małej różnorodności wewnątrzgatunkowej jak i silnym dryfem genetycznym. W próbkach od P. delavayi różnorodność haplotypów była o wiele większa co pokazuje długotrwałą oddzielną ewolucję tego podgatunku.\cite{2}
+
+\subsection{Modele symulacyjne specjacji w przestrzennie złożonych ekosystemach}
+Modele symulacyjne są ważną częścią badań, dzięki którym można zobaczyć efekty interakcji osobników, mutacji czy doboru naturalnego w znacznie szybszym czasie niż oczekiwanie na rezultaty badań fizycznych.
+
+W pracy Specjacja z przepływem genów w heterogenicznym wirtualnym świecie (ang. Speciation with gene flow in a heterogeneous virtual world) autorzy badali czy drobne przeszkody fizyczne oraz niejednorodne środowisko przestrzenne będą mieć wpływ na proces powstawania nowych gatunków przy utrzymującym się przepływie genów. Z symulacji stwierdzono że obecność małych przeszkód fizycznych, nawet przy przepływie genów przyspiesza czas różnicowania się populacji i może prowadzić do powstawania wyraźnych grup genetycznych. Wnioski z tej symulacji są takie, że powstawanie nowych genów nie wymaga całkowitej izolacji genetycznej. Małe bariery oraz zmienność środowiska są wystarczającymi czynnikami. \cite{3}
+
+Wpływ zmian środowiskowych na grupy o ograniczonym przepływie genów zaprezentowali Osmar Freitas, Sabrina B.L. Araujo oraz Paulo R.A. Campos w swojej pracy \textit{Specjacja w modelu metapopulacji po zmianach środowiskowych} (ang. Speciation in a metapopulation model upon environmental changes). Model badawczy składał się z podzielonego na wiele części siedliskowych ekosystemu. Grupy te połączone były ruchem osobników, który zmieniał się pod wpływem zmian klimatycznych. Zaobserwowano, że ruchy te zanikały i powstawały, co przekładało się na zmiany w strukturach gatunkowych. Wyniki pokazały że rozpad gatunków na linie o ograniczonym przepływie genów mogą być spowodowane zmniejszoną tendencją do przemieszczania się osobników, które zaadaptowały się do lokalnych warunków,  przy wystarczająco zróżnicowanym środowisku.\cite{4}
+
+\subsection{Genomowy krajobraz specjacji i identyfikacja barier przepływu genów}
+
+W badaniach nad specjacją coraz większą rolę odgrywa analiza genomu, która pozwala wykrywać fragmenty odpowiadające za ograniczony przepływ genów między populacjami. Jednak wzory zróżnicowania genomowego – \textit{tzw. „wyspy różnicowania”} \cite{2} – mogą wynikać nie tylko z barier przepływu genów, ale także z innych procesów, takich jak selekcja tła czy różnice w rekombinacji.
+
+Dostępne narzędzia analityczne, m.in. metoda \textit{gIMble} \cite{6}, umożliwiają lokalne oszacowanie natężenia przepływu genów i efektywnego rozmiaru populacji oraz identyfikację regionów genomu związanych z ograniczoną migracją.
+
+Najnowsze przeglądy podkreślają, że \textit{lokalna adaptacja} może inicjować specjację jeszcze zanim dojdzie do pełnej izolacji reprodukcyjnej \cite{7}.
+
+W kontekście modelu symulacyjnego oznacza to konieczność monitorowania takich parametrów jak natężenie przepływu genów, siła selekcji lokalnej czy struktura bariery, aby móc porównywać otrzymane wyniki z danymi empirycznymi.
+
+\subsection{Zmiany klimatu i dynamiczne bariery w procesie specjacji}
+
+Zmiany klimatu mogą tworzyć \textit{„miękkie” bariery}, takie jak niekorzystne strefy klimatyczne, które utrudniają kontakt między populacjami. Może to prowadzić do powstawania klimatycznych korytarzy i blokad, wpływających na rozmieszczenie gatunków i zwiększających izolację \cite{1}.
+
+Badania nad refugialnymi populacjami roślin pokazują, że oddzielenie takich ostoi przez bariery klimatyczne lub terenowe sprzyja długotrwałemu zróżnicowaniu genetycznemu \cite{2}.
+
+W modelach symulacyjnych warto więc uwzględnić zmienność barier w czasie – ich pojawianie się, zanikanie oraz zmiany kosztu migracji – aby realistycznie odzwierciedlić procesy specjacyjne zachodzące w środowisku zmieniającym się pod wpływem klimatu.
+
+\subsection{Wnioski dla projektowanego modelu}
+
+Przegląd badań wskazuje, że \textit{struktura przestrzenna} ma kluczowe znaczenie dla procesu specjacji: zarówno fizyczne bariery, jak i nieciągłości klimatyczne wpływają na przepływ genów między populacjami \cite{3}.
+
+Modele ekologiczne podkreślają rolę \textit{lokalnej adaptacji} oraz heterogeniczności środowiska, dlatego warto uwzględnić zmienne środowiskowe przypisane do poszczególnych obszarów symulacji \cite{7}.
+
+Symulacje metapopulacyjne pokazują, że zmiany środowiskowe, wielkość populacji i struktura migracji silnie wpływają na przebieg specjacji \cite{4}.
+
+Z kolei modele oparte na indywidualnych osobnikach wskazują, że nawet niewielkie \textit{bariery przestrzenne} mogą znacząco przyspieszać różnicowanie genetyczne \cite{3}.
+
+Uwzględnienie dynamicznych barier, procesów lokalnej adaptacji oraz parametrów migracji pozwoli tworzyć realistyczne scenariusze prowadzące do powstawania gatunków.
+\printbibliography
+\end{document}
