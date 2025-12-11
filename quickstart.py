@@ -6,7 +6,8 @@ SZYBKI START - Symulacja Formowania Się Gatunków
 Ten skrypt pokazuje jak używać modułu symulacji w prosty sposób.
 """
 
-from symulacja import run_simulation, visualize_comparison, analyze_genetic_divergence
+import os
+from symulacja import run_simulation, visualize_comparison, analyze_genetic_divergence, ensure_results_directory
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -237,6 +238,9 @@ if __name__ == "__main__":
     print("="*60)
     print("\nTen skrypt demonstruje podstawowe możliwości symulacji")
     print("formowania się gatunków z barierami geograficznymi.")
+    
+    # Stwórz katalog results jeśli nie istnieje
+    ensure_results_directory()
     
     # Uruchom wszystkie przykłady
     example_1_basic_simulation()

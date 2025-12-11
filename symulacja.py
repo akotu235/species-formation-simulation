@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import os
 from dataclasses import dataclass, field
 from typing import List, Dict, Tuple
 import matplotlib.pyplot as plt
@@ -7,6 +8,15 @@ from matplotlib.patches import Rectangle
 from scipy.spatial.distance import pdist, squareform
 import warnings
 warnings.filterwarnings('ignore')
+
+# =========================
+# UTILITY: Tworzenie katalogów
+# =========================
+
+def ensure_results_directory():
+    """Tworzy katalog results jeśli nie istnieje"""
+    if not os.path.exists('results'):
+        os.makedirs('results')
 
 # =========================
 # PARAMETRY SYMULACJI

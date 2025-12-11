@@ -5,10 +5,17 @@ Umożliwia łatwe testowanie różnych parametrów i scenariuszy.
 """
 
 import sys
+import os
 sys.path.insert(0, '/home/andrzej/Studia/Modelowanie i symulacja systemów/projekt')
 
-from symulacja import run_simulation, analyze_genetic_divergence, visualize_comparison
+from symulacja import run_simulation, analyze_genetic_divergence, visualize_comparison, ensure_results_directory
 import matplotlib.pyplot as plt
+
+
+def ensure_results_dir():
+    """Tworzy katalog results jeśli nie istnieje"""
+    if not os.path.exists('results'):
+        os.makedirs('results')
 
 
 def run_barrier_vs_no_barrier_comparison():
@@ -194,6 +201,9 @@ def run_population_size_experiment():
 
 
 if __name__ == '__main__':
+    # Stwórz katalog results jeśli nie istnieje
+    ensure_results_dir()
+    
     print("\n" + "="*70)
     print("WIELOWARIANTOWA SYMULACJA FORMOWANIA SIĘ GATUNKÓW")
     print("="*70)

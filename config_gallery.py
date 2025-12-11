@@ -7,7 +7,8 @@ Ten plik zawiera gotowe konfiguracje do różnych scenariuszy badawczych.
 Wykorzystuje słowniki zamiast obiektów klasy SimulationConfig.
 """
 
-from symulacja import run_simulation, visualize_comparison, analyze_genetic_divergence
+import os
+from symulacja import run_simulation, visualize_comparison, analyze_genetic_divergence, ensure_results_directory
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -365,6 +366,9 @@ def demo_population_sensitivity():
 # ============================================================================
 
 if __name__ == "__main__":
+    # Stwórz katalog results jeśli nie istnieje
+    ensure_results_directory()
+    
     print("\n" + "=" * 70)
     print("GALERIA PREDEFINIOWANYCH KONFIGURACJI")
     print("=" * 70)
