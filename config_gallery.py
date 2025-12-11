@@ -272,8 +272,8 @@ def demo_compare_configs(config_names):
             ax.grid(True, alpha=0.3)
         
         plt.tight_layout()
-        plt.savefig('config_comparison.png', dpi=100)
-        print("\n✓ Zapisano: config_comparison.png")
+        plt.savefig('results/config_comparison.png', dpi=100)
+        print("\n✓ Zapisano: results/config_comparison.png")
 
 
 def demo_barrier_types():
@@ -315,8 +315,8 @@ def demo_barrier_types():
         ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('barrier_types_demo.png', dpi=100)
-    print("✓ Zapisano: barrier_types_demo.png")
+    plt.savefig('results/barrier_types_demo.png', dpi=100)
+    print("✓ Zapisano: results/barrier_types_demo.png")
 
 
 def demo_population_sensitivity():
@@ -356,8 +356,8 @@ def demo_population_sensitivity():
         ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('population_sensitivity_demo.png', dpi=100)
-    print("✓ Zapisano: population_sensitivity_demo.png")
+    plt.savefig('results/population_sensitivity_demo.png', dpi=100)
+    print("✓ Zapisano: results/population_sensitivity_demo.png")
 
 
 # ============================================================================

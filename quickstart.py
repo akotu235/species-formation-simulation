@@ -41,8 +41,8 @@ def example_1_basic_simulation():
     # Wizualizacja
     visualize_comparison(populations, env, barriers, collection, 
                         "Przykład 1: Symulacja z barierą pionową",
-                        "example1_barrier.png")
-    print("\nZapisano: example1_barrier.png\n")
+                        "results/example1_barrier.png")
+    print("\nZapisano: results/example1_barrier.png\n")
 
 
 def example_2_no_barrier():
@@ -71,8 +71,8 @@ def example_2_no_barrier():
     # Wizualizacja
     visualize_comparison(populations, env, barriers, collection, 
                         "Przykład 2: Symulacja bez bariery",
-                        "example2_no_barrier.png")
-    print("\nZapisano: example2_no_barrier.png\n")
+                        "results/example2_no_barrier.png")
+    print("\nZapisano: results/example2_no_barrier.png\n")
 
 
 def example_3_horizontal_barrier():
@@ -101,8 +101,8 @@ def example_3_horizontal_barrier():
     # Wizualizacja
     visualize_comparison(populations, env, barriers, collection, 
                         "Przykład 3: Bariera pozioma",
-                        "example3_horizontal.png")
-    print("\nZapisano: example3_horizontal.png\n")
+                        "results/example3_horizontal.png")
+    print("\nZapisano: results/example3_horizontal.png\n")
 
 
 def example_4_mutation_sensitivity():
@@ -157,8 +157,8 @@ def example_4_mutation_sensitivity():
         ax_div.tick_params(axis='y', labelcolor='r')
     
     plt.tight_layout()
-    plt.savefig('example4_mutation.png', dpi=100)
-    print("\nZapisano: example4_mutation.png\n")
+    plt.savefig('results/example4_mutation.png', dpi=100)
+    print("\nZapisano: results/example4_mutation.png\n")
     
     # Podsumowanie
     print("\n" + "="*60)
@@ -227,8 +227,8 @@ def example_5_population_size_impact():
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('example5_population_size.png', dpi=100)
-    print("\nZapisano: example5_population_size.png\n")
+    plt.savefig('results/example5_population_size.png', dpi=100)
+    print("\nZapisano: results/example5_population_size.png\n")
 
 
 if __name__ == "__main__":

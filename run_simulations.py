@@ -76,9 +76,9 @@ def run_barrier_vs_no_barrier_comparison():
     print(f"Wnioski: Bariera {'PRZYSPIESZA' if div1 > div2 * 1.5 else 'nie wpływa na'} specjację")
     
     # Wizualizacja
-    visualize_comparison(pop1, env1, bar1, col1, "Z PIONOWĄ BARIERĄ", "results_barrier.png")
-    visualize_comparison(pop2, env2, bar2, col2, "BEZ BARIERY", "results_no_barrier.png")
-    print("\n✓ Wykresy zapisane: results_barrier.png, results_no_barrier.png")
+    visualize_comparison(pop1, env1, bar1, col1, "Z PIONOWĄ BARIERĄ", "results/results_barrier.png")
+    visualize_comparison(pop2, env2, bar2, col2, "BEZ BARIERY", "results/results_no_barrier.png")
+    print("\n✓ Wykresy zapisane: results/results_barrier.png, results/results_no_barrier.png")
 
 
 def run_mutation_rate_experiment():
@@ -133,8 +133,8 @@ def run_mutation_rate_experiment():
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('experiment2_mutation.png', dpi=150, bbox_inches='tight')
-    print("\n✓ Wykres zapisany: experiment2_mutation.png")
+    plt.savefig('results/experiment2_mutation.png', dpi=150, bbox_inches='tight')
+    print("\n✓ Wykres zapisany: results/experiment2_mutation.png")
 
 
 def run_population_size_experiment():
@@ -189,8 +189,8 @@ def run_population_size_experiment():
     ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('experiment3_population.png', dpi=150, bbox_inches='tight')
-    print("\n✓ Wykres zapisany: experiment3_population.png")
+    plt.savefig('results/experiment3_population.png', dpi=150, bbox_inches='tight')
+    print("\n✓ Wykres zapisany: results/experiment3_population.png")
 
 
 if __name__ == '__main__':
