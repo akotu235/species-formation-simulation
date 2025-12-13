@@ -1,18 +1,54 @@
 \documentclass{article}
-\usepackage{graphicx} % Required for inserting images
 
-\title{ Symulacja procesów powstawania gatunków w ekosystemie w efekcie występowania barier geograficznych}
-\author{Izabela Bubula, Andrzej Kotulski}
-\date{Listopad 2025}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=gray]{hyperref}
+\usepackage{url}
+
+\usepackage{xcolor}    % <-- potrzebne do \definecolor
+\usepackage{listings}  % <-- potrzebne do \lstset
+
 \usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{bibliografia.bib}
 
-\begin{document}
+\title{Symulacja procesów powstawania gatunków w ekosystemie w efekcie występowania barier geograficznych}
+\author{Izabela Bubula, Andrzej Kotulski}
+\date{Listopad 2025}
 
+% Kolory inspirowane IDE
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codecomment}{RGB}{106,153,85}
+\definecolor{codekeyword}{RGB}{0,0,205}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codenumber}{RGB}{128,128,128}
+\definecolor{codefunc}{RGB}{43,145,175}
+
+\lstset{
+  language=Python,
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekeyword}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  numberstyle=\tiny\color{codenumber},
+  numbers=left,
+  stepnumber=1,
+  numbersep=8pt,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  frame=none,
+  captionpos=b,
+  emph={fitness,mutate,get_neighbors,can_move},
+  emphstyle=\color{codefunc}\bfseries
+}
+
+\begin{document}
 \maketitle
+
 
 \section{Wprowadzenie}
 
@@ -91,5 +127,203 @@ Symulacje metapopulacyjne pokazują, że zmiany środowiskowe, wielkość popula
 Z kolei modele oparte na indywidualnych osobnikach wskazują, że nawet niewielkie \textit{bariery przestrzenne} mogą znacząco przyspieszać różnicowanie genetyczne \cite{3}.
 
 Uwzględnienie dynamicznych barier, procesów lokalnej adaptacji oraz parametrów migracji pozwoli tworzyć realistyczne scenariusze prowadzące do powstawania gatunków.
+
+
+\section{Opis rozwiązywanego problemu}
+
+Celem projektu jest zbadanie, w jakim stopniu bariery geograficzne wpływają na rozdzielenie populacji i powstawanie odrębnych linii genetycznych (specjacja alopatryczna). Zagadnienie rozpatrywane jest przez modelowanie prostego ekosystemu dyskretnego, gdzie osobniki rozmieszczone są na siatce, poruszają się, rozmnażają i mutują. Kluczowe pytania to:
+\begin{itemize}
+  \item Jak obecność bariery (jej typ i pozycja) wpływa na tempo dywergencji genetycznej?
+  \item Jakie znaczenie mają parametry demograficzne (rozmiar populacji, szybkość mutacji, intensywność migracji) dla procesu różnicowania?
+  \item Które proste miary (np. odległość genotypów) dobrze odzwierciedlają powstawanie odrębnych skupisk genetycznych?
+\end{itemize}
+
+
+\section{Opracowany model symulacyjny}
+
+Model został celowo uproszczony tak aby można było zrobić izolację wpływów barier przestrzennych. Najważniejsze elementy:
+
+\subsection{Reprezentacja osobników}
+Każdy osobnik to struktura zawierająca:
+\begin{itemize}
+  \item genotyp — wektor 8 wartości w przedziale $[0,1]$ (haploidalny),
+  \item pozycję na siatce (indeks komórki),
+  \item wiek (liczba przebytych generacji).
+\end{itemize}
+
+Średnia wartości wektora genotypu traktowana jest jako przybliżona cecha adaptacyjna osobnika.
+
+\subsection{Środowisko i bariery}
+Przestrzeń modelu to kwadratowa siatka $G$ (domyślnie $10\times10$). Każda komórka ma wartość środowiskową $e(x,y)\in[0,1]$. Bariery reprezentowane są jako macierz binarna — komórki z wartością 1 blokują migrację. Model obsługuje bariery pionowe, poziome i diagonalne.
+
+\subsection{Procesy modelowane w każdej generacji}
+Dla każdej generacji wykonywane są następujące kroki:
+\begin{enumerate}
+  \item \textbf{Ocena fitness}: W zaproponowanym modelu ewolucyjnym dopasowanie osobnika do środowiska (\textit{fitness}) jest określane na podstawie różnicy pomiędzy jego genotypem a lokalnymi warunkami środowiskowymi. Każdy osobnik posiada genotyp reprezentowany jako wektor wartości liczbowych, natomiast środowisko opisane jest pojedynczym parametrem środowiskowym.
+
+Funkcję dopasowania można zapisać w postaci równania:
+
+\begin{equation}
+f = \frac{1}{1 + \left| \sum_{i=1}^{n} g_i - 2E \right|}
+\end{equation}
+
+gdzie:
+\begin{itemize}
+    \item $f$ -- wartość funkcji dopasowania (fitness),
+    \item $g_i$ -- $i$-ty allel genotypu osobnika,
+    \item $\sum_{i=1}^{n} g_i$ -- suma alleli genotypu,
+    \item $E$ -- wartość środowiska w danej komórce siatki,
+    \item $2E$ -- docelowa wartość genotypu optymalnie dopasowanego do środowiska.
+\end{itemize}
+
+Funkcja ta osiąga maksymalną wartość równą $1$ w sytuacji, gdy suma genotypu osobnika jest równa dwukrotności wartości środowiska. Wraz ze wzrostem różnicy pomiędzy genotypem a warunkami środowiskowymi wartość funkcji dopasowania maleje w sposób hiperboliczny. Zastosowanie wartości bezwzględnej powoduje, że zarówno nadmiar, jak i niedobór cechy genetycznej względem środowiska skutkują obniżeniem dopasowania.
+  \item \textbf{Selekcja i reprodukcja}:  dla każdego osobnika obliczane jest jego dopasowanie do lokalnych warunków środowiskowych $fit = fitness(ind, e(x,y))$. Na tej podstawie wyznaczane jest prawdopodobieństwo rozrodu
+  \[
+  p_{\text{repro}} = p_{\text{base}} \cdot fit.
+  \]
+  Jeśli losowa zmienna o rozkładzie jednostajnym spełnia warunek $U(0,1) < p_{\text{repro}}$, osobnik generuje jednego potomka w tej samej komórce siatki.
+  \item \textbf{Mutacja}: genotyp potomka powstaje w wyniku zastosowania funkcji mutacji do genotypu rodzica. Każdy allel mutuje z prawdopodobieństwem $\mu = p_{\text{mutation}}$, zgodnie z parametrami symulacji. Wartości genotypu po mutacji są ograniczane do dopuszczalnego przedziału (np. $[0,1]$).
+
+  \item \textbf{Migracja}:  każdy osobnik może przemieścić się do jednej z komórek sąsiednich z prawdopodobieństwem $p_{\text{mig}} = p_{\text{migration}}$. Ruch jest wykonywany wyłącznie wtedy, gdy istnieje dostępna komórka sąsiednia oraz gdy bariera przestrzenna nie blokuje przejścia pomiędzy komórką początkową i docelową.
+
+  \item \textbf{Regulacja liczebności}:  po dodaniu potomków populacja grupowana jest według komórek siatki. Jeżeli liczba osobników w danej komórce przekracza maksymalną pojemność $K = \text{max\_per\_cell}$, nadmiar osobników jest usuwany losowo, tak aby zachować nie więcej niż $K$ osobników w każdej komórce.
+
+  \item \textbf{Grupowanie}:  w przedstawionej implementacji pojedynczego kroku symulacji etap grupowania osobników w klastry nie jest realizowany bezpośrednio. Analiza skupisk genetycznych wykonywana jest w osobnym etapie przetwarzania wyników, poza funkcją pojedynczego kroku symulacji.
+
+\end{enumerate}
+
+\subsection{Metryki oceny}
+Do oceny stopnia dywergencji i różnorodności używane są proste, interpretowalne miary:
+\begin{itemize}
+  \item odchylenie standardowe wartości alleli w populacji — miara różnorodności wewnątrz populacji,
+  \item odległość euklidesowa między średnimi genotypami dwóch skupisk (znormalizowana) — miara dywergencji między populacjami,
+  \item liczba przestrzennych klastrów — przybliżenie liczby inkipientnych gatunków.
+\end{itemize}
+
+\section{Wykorzystane algorytmy i biblioteki}
+
+\subsection{Algorytmy}
+\begin{itemize}
+  \item \textbf{Selekcja proporcjonalna do fitness}: losowanie rodziców z wagami równymi wartościom fitness.
+  \item \textbf{Mutacja gaussowska}: niezależne, losowe perturbacje alleli z ograniczeniem do przedziału $[0,1]$.
+  \item \textbf{Prosty algorytm grupowania (clustering)}: przegląd par osobników i łączenie tych w odległości poniżej progu (algorytm złożoności $O(N^2)$ — wystarczający dla niewielkich N).
+  \item \textbf{Migracja lokalna}: ruch do sąsiednich komórek z kontrolą przez macierz barier.
+\end{itemize}
+
+\subsection{Algorytmy (przykłady z implementacji)}
+
+\subsubsection{Reprodukcja zależna od fitness (zamiast selekcji proporcjonalnej)}
+W implementacji nie zastosowano klasycznej selekcji ruletkowej (losowania rodziców z wagami równymi wartościom fitness).
+Zamiast tego każdy osobnik w danym kroku symulacji niezależnie podejmuje próbę rozrodu, gdzie prawdopodobieństwo reprodukcji
+jest proporcjonalne do dopasowania osobnika do środowiska:
+\[
+p_{\mathrm{repro}} = p_{\mathrm{base\_repro}} \cdot fitness.
+\]
+Potomek powstaje, gdy zachodzi warunek $U(0,1) < p_{\mathrm{repro}}$.
+
+\begin{lstlisting}[language=Python, caption={Reprodukcja zależna od fitness w kroku symulacji}, label={lst:reproduction}]
+env_val = env[ind.y, ind.x]
+fit = fitness(ind, env_val)
+p_repro = config.p_base_repro * fit
+
+if random.random() < p_repro:
+    child_genotype = mutate(ind.genotype, config.p_mutation)
+    offspring.append(Individual(x=ind.x, y=ind.y,
+                               genotype=child_genotype,
+                               birth_time=current_time))
+\end{lstlisting}
+
+\subsubsection{Mutacja losowa alleli (zamiast mutacji gaussowskiej)}
+Mutacja realizowana jest poprzez niezależne sprawdzenie każdego genu. Dla genu zachodzi mutacja z prawdopodobieństwem
+$\mu = p_{\mathrm{mutation}}$. W przypadku mutacji wartość allelu jest losowana ponownie ze zbioru $\{0,1,2\}$.
+Jest to mutacja dyskretna (nie gaussowska).
+
+\begin{lstlisting}[language=Python, caption={Mutacja genotypu w funkcji \texttt{mutate}}, label={lst:mutation}]
+def mutate(genotype: np.ndarray, p_mut: float):
+    new_genotype = genotype.copy()
+    for i in range(len(new_genotype)):
+        if random.random() < p_mut:
+            new_genotype[i] = random.randint(0, 2)
+    return new_genotype
+\end{lstlisting}
+
+\subsubsection{Migracja lokalna (von Neumanna, 4-kierunkowa) z kontrolą bariery}
+Migracja realizowana jest jako ruch do jednej z komórek sąsiednich (góra/dół/lewo/prawo) z prawdopodobieństwem
+$p_{\mathrm{mig}} = p_{\mathrm{migration}}$. Ruch jest dozwolony wyłącznie wtedy, gdy komórka docelowa nie jest oznaczona jako bariera.
+
+\begin{lstlisting}[language=Python, caption={Definicja sąsiedztwa von Neumanna}, label={lst:neighbors}]
+def get_neighbors(x, y, width, height):
+    neighbors = []
+    if x > 0: neighbors.append((x - 1, y))
+    if x < width - 1: neighbors.append((x + 1, y))
+    if y > 0: neighbors.append((x, y - 1))
+    if y < height - 1: neighbors.append((x, y + 1))
+    return neighbors
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python, caption={Sprawdzenie bariery i wykonanie migracji}, label={lst:migration}]
+def can_move(x1, y1, x2, y2, barrier):
+    return not barrier[y2, x2]
+
+for ind in population:
+    if random.random() < config.p_migration:
+        neighbors = get_neighbors(ind.x, ind.y, width, height)
+        if neighbors:
+            new_x, new_y = random.choice(neighbors)
+            if can_move(ind.x, ind.y, new_x, new_y, barrier):
+                ind.x, ind.y = new_x, new_y
+\end{lstlisting}
+
+\subsubsection{Prosty algorytm grupowania (clustering) w oparciu o podobieństwo genetyczne}
+W projekcie zastosowano prosty mechanizm klastrowania na podstawie odległości Hamminga pomiędzy genotypami.
+Najpierw wyznaczana jest macierz odległości dla wszystkich par osobników (złożoność obliczeniowa $O(N^2)$),
+a następnie osobniki o odległości mniejszej od zadanego progu są przypisywane do tego samego klastra.
+
+\begin{lstlisting}[language=Python, caption={Klastrowanie osobników na podstawie odległości Hamminga}, label={lst:clustering}]
+genotypes = np.array([ind.genotype for ind in population])
+distances = squareform(pdist(genotypes, metric='hamming'))
+
+clusters = []
+assigned = set()
+
+for i, ind in enumerate(population):
+    if i in assigned:
+        continue
+    cluster = [ind]
+    assigned.add(i)
+
+    for j in range(i + 1, len(population)):
+        if j in assigned:
+            continue
+        if distances[i, j] < threshold:
+            cluster.append(population[j])
+            assigned.add(j)
+
+    clusters.append(cluster)
+\end{lstlisting}
+
+
+\subsection{Biblioteki i implementacja}
+Model zaimplementowano w Pythonie. Kluczowe biblioteki:
+\begin{itemize}
+  \item \textbf{NumPy} — operacje macierzowe, generowanie losowych genotypów, szybkie obliczenia wektorowe;
+  \item \textbf{Matplotlib} — rysowanie rozkładu przestrzennego populacji oraz wykresów czasowych;
+  \item \textbf{SciPy} (moduł spatial.distance) — pomoc przy obliczaniu odległości genotypów.
+\end{itemize}
+
+Kod podzielono na moduły: rdzeń symulacji (funkcje inicjalizacji, krok symulacji, mutacje, migracja, grupowanie), skrypty uruchamiające eksperymenty oraz skrypty pomocnicze generujące wykresy i zapisujące wyniki.
+
+\section{Złożoność obliczeniowa i uwagi praktyczne}
+
+Każda iteracja symulacji wykonuje operacje proporcjonalne do liczby osobników $N$. Najbardziej kosztowny etap to grupowanie (parowe porównania), o złożoności $O(N^2)$. Dla typowych ustawień (kilkaset osobników) czas wykonania jest akceptowalny; przy większych N można rozważyć przyspieszenie (np. struktury przestrzenne — siatki, KD-tree).
+
+
 \printbibliography
+
+\section*{Załączniki}
+\addcontentsline{toc}{section}{Załączniki}
+
+Repozytorium projektu dostępne jest pod adresem:  
+\url{https://github.com/akotu235/species-formation-simulation}
+
 \end{document}
